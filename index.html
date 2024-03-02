@@ -7,7 +7,11 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <aside class="game-log-players-moves" id="log-moves">Players moves:</aside>
+    <aside class="game-log-players-moves" id="log-moves">
+        <h4>Players moves:</h4>
+        <ul id="log-list-player-moves">
+        </ul>
+    </aside>
 
     <div class="container-game">
         <section class="game">
@@ -22,16 +26,10 @@
            
             <div class="additional-content" id="additional-content">
                 <div class="game-status">
-                    <p>Current String: <span id="current-string"></span></p>
+                    <p id="current-string"></p>
                     <p>Player 1 Score: <span id="player1-score"></span></p>
                     <p>Player 2 Score: <span id="player2-score"></span></p>
                     <p>Current Player: <span id="current-player"></span></p>
-                </div>
-    
-                
-                <div class="player-buttons">
-                    <button id="sum-up-btn">Sum Up Number</button>
-                    <button id="delete-number-btn">Delete Number</button>
                 </div>
             </div>
         </section>
@@ -44,6 +42,6 @@
         </ul>
     </aside>
 
-    <script src="script.js"></script>
+    <script type="module" src="/js/script.js"></script>
 </body>
 </html>
