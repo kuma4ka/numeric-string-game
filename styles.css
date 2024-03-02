@@ -1,0 +1,94 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100%;
+    background-color: #180c0c;
+}
+
+.game {
+    max-width: 600px;
+    margin: 50px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.additional-content {
+    display: none;
+}
+
+h1 {
+    text-align: center;
+}
+
+.game-status {
+    margin-bottom: 20px;
+}
+
+.buttons {
+    text-align: center;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 0 10px;
+}
+
+button:hover {
+    background-color: #ddd;
+}
+
+#length-number {
+    min-width: 150px;
+    border-radius: 5px;
+}
+
+.container-game {
+    display: flex;
+    flex-direction: row; /* Align elements horizontally */
+    justify-content: center;
+    align-items: center;
+    position: relative; /* Positioning context for absolute positioning of asides */
+}
+
+.container-game > section.game {
+    flex: 1; /* Allow the game section to take up remaining space */
+}
+
+.game-log-players-moves {
+    display: none;
+    width: 20vw;
+    height: 396px;
+    background-color: #f0f0f0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin: 50px 40px;
+    position: absolute; /* Position relative to the container */
+    left: 0; /* Position on the left side */
+}
+
+.game-log-string-changes {
+    display: none;
+    width: 20vw;
+    height: 396px;
+    background-color: #f0f0f0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin: 50px 40px;
+    position: absolute; /* Position relative to the container */
+    right: 0; /* Position on the right side */
+}
+
+
+#log-list-changes-string > li {
+    list-style-type: none;
+    margin-bottom: 10px;
+}

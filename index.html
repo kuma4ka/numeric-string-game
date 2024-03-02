@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <aside class="game-log-players-moves" id="log-moves">Players moves:</aside>
+
+    <div class="container-game">
+        <section class="game">
+            <h1>Number Game</h1>
+            <div class="input-section">
+                <label for="length-number">Desired Length:</label>
+                <input type="number" id="length-number" placeholder="Input desired length" min="15" max="25" required>
+                <button class="start-game-btn">
+                    Start
+                </button>
+            </div>
+           
+            <div class="additional-content" id="additional-content">
+                <div class="game-status">
+                    <p>Current String: <span id="current-string"></span></p>
+                    <p>Player 1 Score: <span id="player1-score"></span></p>
+                    <p>Player 2 Score: <span id="player2-score"></span></p>
+                    <p>Current Player: <span id="current-player"></span></p>
+                </div>
+    
+                
+                <div class="player-buttons">
+                    <button id="sum-up-btn">Sum Up Number</button>
+                    <button id="delete-number-btn">Delete Number</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <aside class="game-log-string-changes" id="log-changes-string">
+        <h4>String changes:</h4>
+        <ul id="log-list-changes-string">
+            <li id="log-start-string"></li>
+        </ul>
+    </aside>
+
+    <script src="script.js"></script>
+</body>
+</html>
