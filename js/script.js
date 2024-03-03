@@ -19,33 +19,29 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Remove event listeners for sumUpButton and deleteNumberButton
+    document.getElementById('current-string').addEventListener('click', handleClick);
 
-    // Event listener for clicks on pairs
-    document.getElementById('current-string').addEventListener('click', function (event) {
+    function handleClick(event) {
         const clickedSpan = event.target;
         if (clickedSpan.classList.contains('paired') || clickedSpan.classList.contains('unpaired')) {
             const clickedSpanIndex = clickedSpan.getAttribute('data-index');
             const clickedSpanClass = clickedSpan.classList[0];
             game.playTurn(clickedSpanIndex, clickedSpanClass); // Pass the clicked pair to playTurn
-
-
-            updateLogChangesInString(game.numericalString);
-            updateLogPlayerMoves();
             updateUI();
         }
-    });
+    }
 
     function updateUI() {
         stringAsSpans(game.generatePairs());
-        elements.player1ScoreElement.textContent = game.player1Score;
-        elements.player2ScoreElement.textContent = game.player2Score;
-        elements.currentPlayerElement.textContent = `Player ${game.currentPlayer}`;
+        elements.userScoreElement.textContent = game.userScore;
+        elements.pcScoreElement.textContent = game.pcScore;
 
         if (game.numericalString.length === 1) {
             alert(game.endGame());
+            elements.restartButton.style.display = 'block';
+            restartGame();
             // Disable event listener for clicks on pairs
-            document.getElementById('current-string').removeEventListener('click', function(){});
+            document.getElementById('current-string').removeEventListener('click', handleClick);
         }
     }
     function stringAsSpans(pairs) {
@@ -62,32 +58,33 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    function updateLogChangesInString(numericalString) {
-        const listStringChanges = document.getElementById('log-list-changes-string');
-        const listItem = document.createElement('li');
-        listItem.textContent = numericalString;
-        listStringChanges.appendChild(listItem);
-    }
-    
-    function updateLogPlayerMoves() {
-        const listPlayerMoves = document.getElementById('log-list-player-moves');
-        const listItem = document.createElement('li');
-        listItem.textContent = `Player ${game.currentPlayer} made a move`;
-        listPlayerMoves.appendChild(listItem);
+    function restartGame() {
+        elements.restartButton.addEventListener('click', function () {
+            elements.inputSection.style.display = 'block'; // Show input section
+            elements.additionalContent.style.display = 'none'; // Hide additional content
+            elements.logPlayerMoves.style.display = 'none'; // Hide logPlayerMoves
+            elements.logChangesInString.style.display = 'none'; // Hide logChangesInString
+            elements.restartButton.style.display = 'none'; // Hide restart button
+            elements.logStartStringListElem.textContent = ''; // Clear start string
+            elements.logChangesInString.innerHTML = ''; // Clear logChangesInString
+            elements.logPlayerMoves.innerHTML = ''; // Clear logPlayerMoves
+            elements.userScoreElement.textContent = 0; // Reset user score
+            elements.pcScoreElement.textContent = 0; // Reset PC score
+        });
     }
 
     function getElements() {
         return {
             inputSection: document.querySelector('.input-section'),
             currentStringElement: document.getElementById('current-string'),
-            player1ScoreElement: document.getElementById('player1-score'),
-            player2ScoreElement: document.getElementById('player2-score'),
-            currentPlayerElement: document.getElementById('current-player'),
+            userScoreElement: document.getElementById('user-score'),
+            pcScoreElement: document.getElementById('pc-score'),
             startGameButton: document.querySelector('.start-game-btn'),
             additionalContent: document.getElementById('additional-content'),
             logChangesInString: document.getElementById('log-changes-string'),
             logPlayerMoves: document.getElementById('log-moves'),
             logStartStringListElem: document.getElementById('log-start-string'),
+            restartButton: document.getElementById('restart-btn'),
         };
     }
 });

@@ -1,9 +1,10 @@
+import Logger from './logs.js';
 class Game {
     constructor(stringLength) {
         this.stringLength = stringLength;
         this.numericalString = this.generateNumericalString(stringLength);
-        this.player1Score = 0;
-        this.player2Score = 0;
+        this.userScore = 0;
+        this.pcScore = 0;
         this.currentPlayer = 'User';
     }
 
@@ -18,19 +19,7 @@ class Game {
     playTurn(spanIndex, spanClass) {
         let pairs = this.generatePairs();
 
-        if (this.numericalString.length === 1) {
-            this.endGame();
-            return;
-        }
-        
-        if (spanClass === 'paired') {
-            this.sumUpPair(pairs, spanIndex);
-        }
-        else if (spanClass === 'unpaired') {
-            this.deleteUnpairedNumber(pairs);
-        }
-
-        this.updateNumericalString(pairs);
+        this.makePlayerMove(pairs, spanIndex, spanClass);
 
         if (this.numericalString.length === 1) {
             this.endGame();
@@ -40,37 +29,59 @@ class Game {
         this.makePCMove(pairs);
     }
 
-    switchPlayer() {
+    switchPlayer(playerMove) {
+        Logger.updateLogPlayerMoves(playerMove);
+        Logger.updateLogChangesInString(this.numericalString);
+
         this.currentPlayer = this.currentPlayer === 'User' ? 'PC' : 'User';
     }
 
     makePlayerMove(pairs, spanIndex, spanClass) {
+        let playerMove; 
+
         if (spanClass === 'paired') {
+            playerMove = `User summed up ${JSON.stringify(pairs[spanIndex])} pair.`;
+
             this.sumUpPair(pairs, spanIndex);
+            console.log(`Score user: ${this.userScore}. Score PC: ${this.pcScore}.`);
         }
         else if (spanClass === 'unpaired') {
+            playerMove = `User deleted ${JSON.stringify(pairs[spanIndex])}.`;
+
             this.deleteUnpairedNumber(pairs);
+            console.log(`Score user: ${this.userScore}. Score PC: ${this.pcScore}.`);
+
         }
 
         this.updateNumericalString(pairs);
 
-        this.switchPlayer();
+        this.switchPlayer(playerMove);
     }
 
     makePCMove(pairs) {
+        let PCMove;
         if (pairs[pairs.length - 1].length === 1) {
+
+            PCMove = `PC deleted ${JSON.stringify(pairs[pairs.length - 1])}.`;
+
             this.deleteUnpairedNumber(pairs);
+            this.updateNumericalString(pairs);
+            console.log(`Score user: ${this.userScore}. Score PC: ${this.pcScore}.`);
+            this.switchPlayer(PCMove);
             return;
         }
 
         const randomPairToSumUp = Math.floor(Math.random() * pairs.length);
+        PCMove = `PC summed up ${JSON.stringify(pairs[randomPairToSumUp])} pair.`;
         
         this.sumUpPair(pairs, randomPairToSumUp);
-
+        console.log(`Score user: ${this.userScore}. Score PC: ${this.pcScore}.`);
         this.updateNumericalString(pairs);
 
-        this.switchPlayer();
+        this.switchPlayer(PCMove);
     }
+
+
 
     generatePairs() {
         const pairs = [];
@@ -100,19 +111,20 @@ class Game {
         }
         
         pairs[selectedPairIndex] = sum.toString();
-        this.currentPlayer === "User" ? this.player1Score++ : this.player2Score++;
+        this.currentPlayer === "User" ? this.userScore++ : this.pcScore++;
     }
 
     deleteUnpairedNumber(pairs) {
         pairs.pop();
-        this.currentPlayer === 'User' ? this.player1Score-- : this.player2Score--;
+        this.currentPlayer === 'User' ? this.pcScore-- : this.userScore--;
     }
 
     endGame() {
         alert("Game Over!");
-        alert("User Score: " + this.player1Score);
-        alert("PC Score: " + this.player2Score);
-        alert(this.player1Score > this.player2Score ? "Player 1 Wins!" : (this.player2Score > this.player1Score ? "Player 2 Wins!" : "It's a draw!"));
+        alert("User Score: " + this.userScore);
+        alert("PC Score: " + this.pcScore);
+        alert(this.userScore > this.pcScore ? "User Wins!" : (this.pcScore > this.userScore ? "PC Wins!" : "It's a draw!"));
+        return;
     }
 }
 

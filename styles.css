@@ -27,12 +27,57 @@ h1 {
     text-align: center;
 }
 
+ul {
+    padding: 0;
+    margin: 0;
+    border-radius: 5px;
+}
+
+#log-list-player-moves {
+    padding-left: 30px;
+}
+
+.aside-style {
+    border-radius: 20px;
+}
+
+.aside-style > h4{
+    margin: 10px 0 15px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.log-ul {
+    max-height: 300px;
+    overflow-y: scroll;
+}
+
+/* Style the scrollbar */
+.log-ul::-webkit-scrollbar {
+    width: 10px; /* Width of the scrollbar */
+}
+
+.log-ul::-webkit-scrollbar-track {
+    background-color: #f1f1f1; /* Color of the scrollbar track */
+}
+
+.log-ul::-webkit-scrollbar-thumb {
+    background-color: #888; /* Color of the scrollbar thumb */
+    border-radius: 5px; /* Rounded corners */
+}
+
+
 .game-status {
     margin-bottom: 20px;
 }
 
 .buttons {
     text-align: center;
+}
+
+#restart-btn {
+    display: none;
 }
 
 button {
@@ -73,7 +118,6 @@ button:hover {
     margin: 50px 40px;
     position: absolute; /* Position relative to the container */
     left: 0; /* Position on the left side */
-    overflow-y: scroll;
 }
 
 .game-log-string-changes {
@@ -86,17 +130,17 @@ button:hover {
     margin: 50px 40px;
     position: absolute; /* Position relative to the container */
     right: 0; /* Position on the right side */
-    overflow-y: scroll;
-
 }
 
-
 #log-list-changes-string > li {
-    display: flex;
     list-style-type: none;
     margin-bottom: 10px;
 }
 
+#log-list-player-moves > li {
+    list-style-type: decimal-leading-zero;
+    margin-bottom: 10px;
+}
 
 /* Styles for paired spans */
 .paired {

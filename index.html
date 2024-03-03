@@ -7,9 +7,9 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <aside class="game-log-players-moves" id="log-moves">
+    <aside class="game-log-players-moves aside-style" id="log-moves">
         <h4>Players moves:</h4>
-        <ul id="log-list-player-moves">
+        <ul id="log-list-player-moves" class="log-ul">
         </ul>
     </aside>
 
@@ -27,17 +27,17 @@
             <div class="additional-content" id="additional-content">
                 <div class="game-status">
                     <p id="current-string"></p>
-                    <p>Player 1 Score: <span id="player1-score"></span></p>
-                    <p>Player 2 Score: <span id="player2-score"></span></p>
-                    <p>Current Player: <span id="current-player"></span></p>
+                    <p>User Score: <span id="user-score"></span></p>
+                    <p>PC Score: <span id="pc-score"></span></p>
+                    <button id="restart-btn">Restart</button>
                 </div>
             </div>
         </section>
     </div>
 
-    <aside class="game-log-string-changes" id="log-changes-string">
+    <aside class="game-log-string-changes aside-style" id="log-changes-string">
         <h4>String changes:</h4>
-        <ul id="log-list-changes-string">
+        <ul id="log-list-changes-string" class="log-ul">
             <li id="log-start-string"></li>
         </ul>
     </aside>
