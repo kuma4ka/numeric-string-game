@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
         elements.pcScoreElement.textContent = game.pcScore;
 
         if (game.numericalString.length === 1) {
-            alert(game.endGame());
+            game.endGame();
             elements.restartButton.style.display = 'block';
             restartGame();
             // Disable event listener for clicks on pairs
@@ -60,6 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function restartGame() {
         elements.restartButton.addEventListener('click', function () {
+            document.getElementById('current-string').addEventListener('click', handleClick);
             elements.inputSection.style.display = 'block'; // Show input section
             elements.additionalContent.style.display = 'none'; // Hide additional content
             elements.logPlayerMoves.style.display = 'none'; // Hide logPlayerMoves

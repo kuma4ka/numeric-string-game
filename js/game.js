@@ -50,7 +50,6 @@ class Game {
 
             this.deleteUnpairedNumber(pairs);
             console.log(`Score user: ${this.userScore}. Score PC: ${this.pcScore}.`);
-
         }
 
         this.updateNumericalString(pairs);
@@ -80,8 +79,6 @@ class Game {
 
         this.switchPlayer(PCMove);
     }
-
-
 
     generatePairs() {
         const pairs = [];
