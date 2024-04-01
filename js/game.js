@@ -58,28 +58,78 @@ class Game {
     }
 
     makePCMove(pairs) {
-        let PCMove;
-        if (pairs[pairs.length - 1].length === 1) {
+        let bestMove = this.alphaBeta(this.numericalString, 10, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY, true);
+        let selectedPairIndex = bestMove.index;
 
-            PCMove = `PC deleted ${JSON.stringify(pairs[pairs.length - 1])}.`;
-
+        let pcMove;
+        if (pairs[selectedPairIndex].length === 2) {
+            pcMove = `PC summed up ${JSON.stringify(pairs[selectedPairIndex])} pair.`;
+            this.sumUpPair(pairs, selectedPairIndex);
+        } else {
+            pcMove = `PC deleted ${JSON.stringify(pairs[selectedPairIndex])}.`;
             this.deleteUnpairedNumber(pairs);
-            this.updateNumericalString(pairs);
-            console.log(`Score user: ${this.userScore}. Score PC: ${this.pcScore}.`);
-            this.switchPlayer(PCMove);
-            return;
         }
 
-        const randomPairToSumUp = Math.floor(Math.random() * pairs.length);
-        PCMove = `PC summed up ${JSON.stringify(pairs[randomPairToSumUp])} pair.`;
-        
-        this.sumUpPair(pairs, randomPairToSumUp);
-        console.log(`Score user: ${this.userScore}. Score PC: ${this.pcScore}.`);
         this.updateNumericalString(pairs);
-
-        this.switchPlayer(PCMove);
+        this.switchPlayer(pcMove);
     }
 
+    alphaBeta(numericalString, depth, alpha, beta, maximizingPlayer) {
+        if (depth === 0 || numericalString.length === 1) {
+            return { score: this.evaluate(numericalString), index: -1 };
+        }
+
+        let pairs = this.generatePairs();
+
+        if (maximizingPlayer) {
+            let maxEval = { score: Number.NEGATIVE_INFINITY, index: -1 };
+            for (let i = 0; i < pairs.length; i++) {
+                let newNumericalString = this.simulateMove(numericalString, pairs, i);
+                let evaluate = this.alphaBeta(newNumericalString, depth - 1, alpha, beta, false);
+                if (evaluate.score > maxEval.score) {
+                    maxEval.score = evaluate.score;
+                    maxEval.index = i;
+                }
+                alpha = Math.max(alpha, evaluate.score);
+                if (beta <= alpha) break;
+            }
+            return maxEval;
+        } else {
+            let minEval = { score: Number.POSITIVE_INFINITY, index: -1 };
+            for (let i = 0; i < pairs.length; i++) {
+                let newNumericalString = this.simulateMove(numericalString, pairs, i);
+                let evaluate = this.alphaBeta(newNumericalString, depth - 1, alpha, beta, true);
+                if (evaluate.score < minEval.score) {
+                    minEval.score = evaluate.score;
+                    minEval.index = i;
+                }
+                beta = Math.min(beta, evaluate.score);
+                if (beta <= alpha) break;
+            }
+            return minEval;
+        }
+    }
+
+    evaluate() {
+        return this.userScore - this.pcScore;
+    }
+    
+
+    simulateMove(numericalString, pairs, index) {
+        let newNumericalString = numericalString.slice();
+        let pair = pairs[index];
+        if (pair.length === 2) {
+            let sum = pair.reduce((a, b) => a + b, 0);
+            if (sum > 6) {
+                sum -= 6;
+            }
+            newNumericalString = newNumericalString.replace(pair.join(''), sum.toString());
+        } else {
+            newNumericalString = newNumericalString.replace(pair[0], '');
+        }
+        return newNumericalString;
+    }
+    
     generatePairs() {
         const pairs = [];
         for (let i = 0; i < this.numericalString.length; i += 2) {
@@ -113,7 +163,12 @@ class Game {
 
     deleteUnpairedNumber(pairs) {
         pairs.pop();
-        this.currentPlayer === 'User' ? this.pcScore-- : this.userScore--;
+        if (this.currentPlayer === 'User') {
+            this.pcScore -= 2;
+        }
+        else {
+            this.userScore -= 2;
+        }
     }
 
     endGame() {
