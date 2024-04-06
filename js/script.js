@@ -4,6 +4,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const elements = getElements(); // Retrieve all required elements
     let game;
 
+    document.getElementById('length-number').addEventListener('keypress', handleEnterKeyPress);
+
     elements.startGameButton.addEventListener('click', function () {
         const length = parseInt(document.getElementById('length-number').value);
         if (length >= 15 && length <= 25) {
@@ -21,6 +23,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.getElementById('current-string').addEventListener('click', handleClick);
 
+    restartGame();
+
     function handleClick(event) {
         const clickedSpan = event.target;
         if (clickedSpan.classList.contains('paired') || clickedSpan.classList.contains('unpaired')) {
@@ -37,8 +41,10 @@ document.addEventListener("DOMContentLoaded", function () {
         elements.pcScoreElement.textContent = game.pcScore;
 
         if (game.numericalString.length === 1) {
-            game.endGame();
+            let winner = game.endGame();
             elements.restartButton.style.display = 'block';
+            elements.winnerParagraph.textContent = winner;
+            elements.winnerParagraph.style.color = 'green';
             restartGame();
             // Disable event listener for clicks on pairs
             document.getElementById('current-string').removeEventListener('click', handleClick);
@@ -86,6 +92,25 @@ document.addEventListener("DOMContentLoaded", function () {
             logPlayerMoves: document.getElementById('log-moves'),
             logStartStringListElem: document.getElementById('log-start-string'),
             restartButton: document.getElementById('restart-btn'),
+            winnerParagraph: document.getElementById('winner')
         };
     }
+
+    function handleEnterKeyPress(event) {
+        // Get the input field
+        var inputField = document.getElementById('length-number');
+    
+        // Check if 'Enter' key is pressed (key code 13)
+        if (event.key === 'Enter') {
+            // Trigger the click event on the start button
+            document.querySelector('.start-game-btn').click();
+        }
+    }
+
+    function restartGame() {
+        elements.restartButton.addEventListener('click', function () {
+            window.location.reload(); // Reload the page
+        });
+    }
+    
 });

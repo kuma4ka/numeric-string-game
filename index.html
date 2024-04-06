@@ -5,9 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Number Game</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,500;1,500&display=swap" rel="stylesheet">
 </head>
-<body>
-    <aside class="game-log-players-moves aside-style" id="log-moves">
+<body class="montserrat-font">
+    <aside class="game-log game-log-players-moves aside-style" id="log-moves">
         <h4>Players moves:</h4>
         <ul id="log-list-player-moves" class="log-ul">
         </ul>
@@ -29,13 +32,16 @@
                     <p id="current-string"></p>
                     <p>User Score: <span id="user-score"></span></p>
                     <p>PC Score: <span id="pc-score"></span></p>
-                    <button id="restart-btn">Restart</button>
+                    <p id="winner"></p>
+                    <div class="restart-btn-centered">
+                        <button id="restart-btn">Restart</button>
+                    </div>
                 </div>
             </div>
         </section>
     </div>
 
-    <aside class="game-log-string-changes aside-style" id="log-changes-string">
+    <aside class="game-log game-log-string-changes aside-style" id="log-changes-string">
         <h4>String changes:</h4>
         <ul id="log-list-changes-string" class="log-ul">
             <li id="log-start-string"></li>

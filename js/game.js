@@ -172,11 +172,12 @@ class Game {
     }
 
     endGame() {
+        let winner = this.userScore > this.pcScore ? "User Wins!" : (this.pcScore > this.userScore ? "PC Wins!" : "It's a draw!");
         alert("Game Over!");
         alert("User Score: " + this.userScore);
         alert("PC Score: " + this.pcScore);
-        alert(this.userScore > this.pcScore ? "User Wins!" : (this.pcScore > this.userScore ? "PC Wins!" : "It's a draw!"));
-        return;
+        alert(winner);
+        return winner;
     }
 }
 
