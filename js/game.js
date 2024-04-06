@@ -1,4 +1,6 @@
 import Logger from './logs.js';
+
+// Define the Game class
 class Game {
     constructor(stringLength) {
         this.stringLength = stringLength;
@@ -8,6 +10,7 @@ class Game {
         this.currentPlayer = 'User';
     }
 
+    // Generate a random numerical string of a given length
     generateNumericalString(length) {
         let numericalString = '';
         for (let i = 0; i < length; i++) {
@@ -16,19 +19,20 @@ class Game {
         return numericalString;
     }
 
+    // Play a turn of the game
     playTurn(spanIndex, spanClass) {
         let pairs = this.generatePairs();
 
         this.makePlayerMove(pairs, spanIndex, spanClass);
 
         if (this.numericalString.length === 1) {
-            this.endGame();
             return;
         }
         
         this.makePCMove(pairs);
     }
 
+    // Switch the current player
     switchPlayer(playerMove) {
         Logger.updateLogPlayerMoves(playerMove);
         Logger.updateLogChangesInString(this.numericalString);
@@ -36,6 +40,7 @@ class Game {
         this.currentPlayer = this.currentPlayer === 'User' ? 'PC' : 'User';
     }
 
+    // Make a move for the player
     makePlayerMove(pairs, spanIndex, spanClass) {
         let playerMove; 
 
@@ -57,6 +62,7 @@ class Game {
         this.switchPlayer(playerMove);
     }
 
+    // Make a move for the PC
     makePCMove(pairs) {
         let bestMove = this.alphaBeta(this.numericalString, 10, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY, true);
         let selectedPairIndex = bestMove.index;
@@ -74,47 +80,71 @@ class Game {
         this.switchPlayer(pcMove);
     }
 
+    // Perform the alpha-beta pruning algorithm to determine the best move for the PC
     alphaBeta(numericalString, depth, alpha, beta, maximizingPlayer) {
         if (depth === 0 || numericalString.length === 1) {
+            // console.log("Terminal Node Reached.");
             return { score: this.evaluate(numericalString), index: -1 };
         }
-
+    
         let pairs = this.generatePairs();
-
+        // console.log("Pairs:", pairs);
+    
         if (maximizingPlayer) {
             let maxEval = { score: Number.NEGATIVE_INFINITY, index: -1 };
             for (let i = 0; i < pairs.length; i++) {
                 let newNumericalString = this.simulateMove(numericalString, pairs, i);
+                // console.log(`Maximizing Player - Trying move: ${JSON.stringify(pairs[i])}`);
+                // console.log(`New Numerical String: ${newNumericalString}`);
                 let evaluate = this.alphaBeta(newNumericalString, depth - 1, alpha, beta, false);
+                // console.log(`Maximizing Player - Evaluated Move: ${JSON.stringify(pairs[i])}`);
+                // console.log(`Maximizing Player - Evaluated Score: ${evaluate.score}`);
                 if (evaluate.score > maxEval.score) {
                     maxEval.score = evaluate.score;
                     maxEval.index = i;
                 }
                 alpha = Math.max(alpha, evaluate.score);
-                if (beta <= alpha) break;
+                // console.log(`Maximizing Player - Alpha: ${alpha}`);
+                // console.log(`Maximizing Player - Beta: ${beta}`);
+                if (beta <= alpha) {
+                    // console.log("Maximizing Player - Beta Cut-off.");
+                    break;
+                }
             }
+            // console.log("Maximizing Player - Best Move:", maxEval);
             return maxEval;
         } else {
             let minEval = { score: Number.POSITIVE_INFINITY, index: -1 };
             for (let i = 0; i < pairs.length; i++) {
                 let newNumericalString = this.simulateMove(numericalString, pairs, i);
+                // console.log(`Minimizing Player - Trying move: ${JSON.stringify(pairs[i])}`);
+                // console.log(`New Numerical String: ${newNumericalString}`);
                 let evaluate = this.alphaBeta(newNumericalString, depth - 1, alpha, beta, true);
+                // console.log(`Minimizing Player - Evaluated Move: ${JSON.stringify(pairs[i])}`);
+                // console.log(`Minimizing Player - Evaluated Score: ${evaluate.score}`);
                 if (evaluate.score < minEval.score) {
                     minEval.score = evaluate.score;
                     minEval.index = i;
                 }
                 beta = Math.min(beta, evaluate.score);
-                if (beta <= alpha) break;
+                // console.log(`Minimizing Player - Alpha: ${alpha}`);
+                // console.log(`Minimizing Player - Beta: ${beta}`);
+                if (beta <= alpha) {
+                    // console.log("Minimizing Player - Beta Cut-off.");
+                    break;
+                }
             }
+            // console.log("Minimizing Player - Best Move:", minEval);
             return minEval;
         }
     }
 
+    // Evaluate the current state of the game
     evaluate() {
         return this.userScore - this.pcScore;
     }
-    
 
+    // Simulate a move by replacing numbers in the numerical string
     simulateMove(numericalString, pairs, index) {
         let newNumericalString = numericalString.slice();
         let pair = pairs[index];
@@ -130,6 +160,7 @@ class Game {
         return newNumericalString;
     }
     
+    // Generate pairs from the numerical string
     generatePairs() {
         const pairs = [];
         for (let i = 0; i < this.numericalString.length; i += 2) {
@@ -142,15 +173,18 @@ class Game {
         return pairs;
     }
 
+    // Check if the numerical string has an odd length
     isOddLength() {
         return this.numericalString.length % 2 !== 0;
     }
 
+    // Update the numerical string based on the pairs
     updateNumericalString(pairs) {
         const newStr = pairs.flat().join('');
         this.numericalString = newStr;
     }
 
+    // Sum up a pair and update the scores
     sumUpPair(pairs, selectedPairIndex) {
         let sum = pairs[selectedPairIndex].reduce((a, b) => a + b, 0);
         if (sum > 6) {
@@ -161,6 +195,7 @@ class Game {
         this.currentPlayer === "User" ? this.userScore++ : this.pcScore++;
     }
 
+    // Delete an unpaired number and update the scores
     deleteUnpairedNumber(pairs) {
         pairs.pop();
         if (this.currentPlayer === 'User') {
@@ -171,6 +206,7 @@ class Game {
         }
     }
 
+    // End the game and display the winner
     endGame() {
         let winner = this.userScore > this.pcScore ? "User Wins!" : (this.pcScore > this.userScore ? "PC Wins!" : "It's a draw!");
         alert("Game Over!");
