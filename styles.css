@@ -1,8 +1,9 @@
+/* Global styles */
 body {
+    font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
     height: 100vh;
@@ -10,6 +11,31 @@ body {
     background-color: #180c0c;
 }
 
+ul {
+    padding: 0;
+    margin: 0;
+    border-radius: 5px;
+}
+
+li {
+    padding-bottom: 10px;
+}
+
+
+/* Container Styles */
+.container-game {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.container-game > section.game {
+    flex: 1;
+}
+
+/* Game Section Styles */
 .game {
     max-width: 600px;
     margin: 50px auto;
@@ -19,26 +45,48 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.additional-content {
+/* Game Status Restart Button Centered */
+.restart-btn-centered {
+    display: flex;
+    justify-content: center;
+}
+
+/* Game Log Styles */
+.game-log {
     display: none;
+    width: 20vw;
+    height: 396px;
+    background-color: #f0f0f0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin: 50px 40px;
+    position: absolute;
+    border-radius: 15px;
 }
 
-h1 {
-    text-align: center;
+.game-log-players-moves {
+    left: 0;
 }
 
-ul {
-    padding: 0;
-    margin: 0;
-    border-radius: 5px;
+.game-log-string-changes {
+    right: 0;
 }
-
 #log-list-player-moves {
     padding-left: 30px;
 }
 
-.aside-style {
-    border-radius: 20px;
+#log-list-player-moves > li {
+    list-style-type: decimal-leading-zero;
+}
+
+/* Additional Content Styles */
+.additional-content {
+    display: none;
+}
+
+/* Typography */
+h1 {
+    text-align: center;
 }
 
 .aside-style > h4{
@@ -48,114 +96,99 @@ ul {
     align-items: center;
 }
 
+input[type="number"] {
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+    min-width: 170px; /* Adjust the width as needed */
+}
+
+input[type="number"]:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* Button Styles */
+.buttons {
+    text-align: center;
+}
+
+button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.start-game-btn {
+    background-color: #008CBA;
+}
+
+.start-game-btn:hover {
+    background-color: #005f7f;
+}
+
+#restart-btn {
+    display: none;
+    background-color: #f44336;
+}
+
+#restart-btn:hover {
+    background-color: #d32f2f;
+}
+
+/* Scroll-bar styles */
 .log-ul {
     max-height: 300px;
     overflow-y: scroll;
 }
 
-/* Style the scrollbar */
 .log-ul::-webkit-scrollbar {
-    width: 10px; /* Width of the scrollbar */
+    width: 10px;
 }
 
 .log-ul::-webkit-scrollbar-track {
-    background-color: #f1f1f1; /* Color of the scrollbar track */
+    background-color: #f1f1f1;
 }
 
 .log-ul::-webkit-scrollbar-thumb {
-    background-color: #888; /* Color of the scrollbar thumb */
-    border-radius: 5px; /* Rounded corners */
-}
-
-
-.game-status {
-    margin-bottom: 20px;
-}
-
-.buttons {
-    text-align: center;
-}
-
-#restart-btn {
-    display: none;
-}
-
-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    margin: 0 10px;
-}
-
-button:hover {
-    background-color: #ddd;
-}
-
-#length-number {
-    min-width: 150px;
+    background-color: #888;
     border-radius: 5px;
 }
 
-.container-game {
-    display: flex;
-    flex-direction: row; /* Align elements horizontally */
-    justify-content: center;
-    align-items: center;
-    position: relative; /* Positioning context for absolute positioning of asides */
-}
 
-.container-game > section.game {
-    flex: 1; /* Allow the game section to take up remaining space */
-}
-
-.game-log-players-moves {
-    display: none;
-    width: 20vw;
-    height: 396px;
-    background-color: #f0f0f0;
-    padding: 10px;
-    border: 1px solid #ccc;
-    margin: 50px 40px;
-    position: absolute; /* Position relative to the container */
-    left: 0; /* Position on the left side */
-}
-
-.game-log-string-changes {
-    display: none;
-    width: 20vw;
-    height: 396px;
-    background-color: #f0f0f0;
-    padding: 10px;
-    border: 1px solid #ccc;
-    margin: 50px 40px;
-    position: absolute; /* Position relative to the container */
-    right: 0; /* Position on the right side */
-}
-
-#log-list-changes-string > li {
-    list-style-type: none;
-    margin-bottom: 10px;
-}
-
-#log-list-player-moves > li {
-    list-style-type: decimal-leading-zero;
-    margin-bottom: 10px;
-}
-
-/* Styles for paired spans */
-.paired {
-    cursor: pointer; /* Change cursor to pointer on hover */
+/* Paired and Unpaired Numbers Styles */
+.paired,
+.unpaired {
+    cursor: pointer;
 }
 
 .paired:hover {
-    background-color: lightgreen; /* Change background color on hover */
-}
-
-/* Styles for unpaired spans */
-.unpaired {
-    cursor: pointer; /* Change cursor to pointer on hover */
+    background-color: lightgreen;
 }
 
 .unpaired:hover {
-    background-color: salmon; /* Change background color on hover */
+    background-color: salmon;
+}
+
+/* Montserrat Font Style */
+.montserrat-font {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
 }
