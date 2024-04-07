@@ -20,13 +20,29 @@
         <section class="game">
             <h1>Number Game</h1>
             <div class="input-section">
-                <label for="length-number">Desired Length:</label>
-                <input type="number" id="length-number" placeholder="Input desired length" min="15" max="25" required>
+                <div class="input-length">
+                    <label for="length-number">Desired Length:</label>
+                    <input type="number" id="length-number" placeholder="Input desired length" min="15" max="25" required>
+                </div>
+                <div class="input-algorithm">
+                    <label for="algorithm-select">Algorithm:</label>
+                    <select id="algorithm-select" class="select-algorithm">
+                        <option value="MiniMax">MiniMax Algorithm</option>
+                        <option value="AlphaBeta">Alpha-Beta Pruning</option>
+                    </select>
+                </div>
+                <div class="input-player">
+                    <label for="player-select">First Player:</label>
+                    <select id="player-select" class="select-player">
+                        <option value="User">User</option>
+                        <option value="PC">PC</option>
+                    </select>
+                </div>
                 <button class="start-game-btn">
                     Start
                 </button>
             </div>
-           
+            
             <div class="additional-content" id="additional-content">
                 <div class="game-status">
                     <p id="current-string"></p>

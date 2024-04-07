@@ -37,6 +37,8 @@ li {
 
 /* Game Section Styles */
 .game {
+    display: flex;
+    flex-direction: column;
     max-width: 600px;
     margin: 50px auto;
     background-color: #fff;
@@ -96,18 +98,46 @@ h1 {
     align-items: center;
 }
 
-input[type="number"] {
+.input-section {
+    display: inherit;
+    flex-direction: column;
+    gap: 10px;
+}
+
+input[type="number"],
+select {
     padding: 10px;
     border: 2px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
     transition: border-color 0.3s;
-    min-width: 170px; /* Adjust the width as needed */
+    min-width: 170px;
 }
 
-input[type="number"]:focus {
+input[type="number"]:focus,
+select:focus {
     border-color: #007bff;
     outline: none;
+}
+
+.select-algorithm {
+    color: #878585;
+    cursor: pointer;
+    min-width: 194px;
+}
+
+.select-player {
+    color: #878585;
+    cursor: pointer;
+    min-width: 196px;
+}
+
+.input-algorithm > label {
+    margin-right: 42px;
+}
+
+.input-player > label {
+    margin-right: 33px;
 }
 
 /* Button Styles */

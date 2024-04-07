@@ -2,12 +2,13 @@ import Logger from './logs.js';
 
 // Define the Game class
 class Game {
-    constructor(stringLength) {
+    constructor(stringLength, mode, playTurn) {
         this.stringLength = stringLength;
         this.numericalString = this.generateNumericalString(stringLength);
         this.userScore = 0;
         this.pcScore = 0;
-        this.currentPlayer = 'User';
+        this.currentPlayer = playTurn;
+        this.mode = mode;
     }
 
     // Generate a random numerical string of a given length
@@ -19,17 +20,20 @@ class Game {
         return numericalString;
     }
 
-    // Play a turn of the game
     playTurn(spanIndex, spanClass) {
         let pairs = this.generatePairs();
-
-        this.makePlayerMove(pairs, spanIndex, spanClass);
-
-        if (this.numericalString.length === 1) {
-            return;
+    
+        if (this.currentPlayer === 'User') {
+            this.makePlayerMove(pairs, spanIndex, spanClass);
+            
+            if (this.numericalString.length !== 1) {
+                this.playTurn();
+            } else {
+                return
+            }
+        } else {
+            this.makePCMove(pairs);
         }
-        
-        this.makePCMove(pairs);
     }
 
     // Switch the current player
@@ -64,7 +68,18 @@ class Game {
 
     // Make a move for the PC
     makePCMove(pairs) {
-        let bestMove = this.alphaBeta(this.numericalString, 10, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY, true);
+        let bestMove;
+        console.log('im here PCMove');
+
+        if (this.mode === 'MiniMax') {
+            bestMove = this.miniMax(this.numericalString, 5, true);
+            console.log('im here minimax');
+        } else if (this.mode === 'AlphaBeta') {
+            bestMove = this.alphaBeta(this.numericalString, 5, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY, true);
+            console.log('im here alpha');
+        
+        }
+
         let selectedPairIndex = bestMove.index;
 
         let pcMove;
@@ -139,6 +154,52 @@ class Game {
         }
     }
 
+    miniMax(numericalString, depth, maximizingPlayer) {
+        // console.log(`MiniMax called with depth: ${depth}, maximizingPlayer: ${maximizingPlayer}`);
+    
+        if (depth === 0 || numericalString.length === 1) {
+            // console.log("Reached terminal state.");
+            return { score: this.evaluate(numericalString), index: -1 };
+        }
+    
+        let pairs = this.generatePairs();
+        // console.log("Pairs:", pairs);
+    
+        if (maximizingPlayer) {
+            let maxEval = { score: Number.NEGATIVE_INFINITY, index: -1 };
+            for (let i = 0; i < pairs.length; i++) {
+                let newNumericalString = this.simulateMove(numericalString, pairs, i);
+                // console.log(`Maximizing Player - Trying move: ${JSON.stringify(pairs[i])}`);
+                // console.log(`New Numerical String: ${newNumericalString}`);
+                let evaluate = this.miniMax(newNumericalString, depth - 1, false);
+                // console.log(`Maximizing Player - Evaluated Move: ${JSON.stringify(pairs[i])}`);
+                // console.log(`Maximizing Player - Evaluated Score: ${evaluate.score}`);
+                if (evaluate.score > maxEval.score) {
+                    maxEval.score = evaluate.score;
+                    maxEval.index = i;
+                }
+            }
+            // console.log("Maximizing Player - Best Move:", maxEval);
+            return maxEval;
+        } else {
+            let minEval = { score: Number.POSITIVE_INFINITY, index: -1 };
+            for (let i = 0; i < pairs.length; i++) {
+                let newNumericalString = this.simulateMove(numericalString, pairs, i);
+                // console.log(`Minimizing Player - Trying move: ${JSON.stringify(pairs[i])}`);
+                // console.log(`New Numerical String: ${newNumericalString}`);
+                let evaluate = this.miniMax(newNumericalString, depth - 1, true);
+                // console.log(`Minimizing Player - Evaluated Move: ${JSON.stringify(pairs[i])}`);
+                // console.log(`Minimizing Player - Evaluated Score: ${evaluate.score}`);
+                if (evaluate.score < minEval.score) {
+                    minEval.score = evaluate.score;
+                    minEval.index = i;
+                }
+            }
+            // console.log("Minimizing Player - Best Move:", minEval);
+            return minEval;
+        }
+    }
+    
     // Evaluate the current state of the game
     evaluate() {
         return this.userScore - this.pcScore;

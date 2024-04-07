@@ -11,13 +11,20 @@ document.addEventListener("DOMContentLoaded", function () {
     elements.startGameButton.addEventListener('click', function () {
         const length = parseInt(document.getElementById('length-number').value);
         if (length >= 15 && length <= 25) {
-            game = new Game(length);
+            const mode = elements.modeSelect.value;
+            const playerTurn = elements.playerSelect.value;
+            game = new Game(length, mode, playerTurn);
             updateUI();
             elements.additionalContent.style.display = 'block';
             elements.logPlayerMoves.style.display = 'block';
             elements.logChangesInString.style.display = 'block';
             elements.logStartStringListElem.textContent = `Start string: ${game.numericalString}`;
             elements.inputSection.style.display = 'none';
+            if (playerTurn === 'PC') {
+                setTimeout(() => {
+                    game.playTurn();
+                }, 300);
+            }
         } else {
             alert('Please enter a number between 15 and 25.');
         }
@@ -98,7 +105,9 @@ document.addEventListener("DOMContentLoaded", function () {
             logPlayerMoves: document.getElementById('log-moves'),
             logStartStringListElem: document.getElementById('log-start-string'),
             restartButton: document.getElementById('restart-btn'),
-            winnerParagraph: document.getElementById('winner')
+            winnerParagraph: document.getElementById('winner'),
+            modeSelect: document.getElementById('algorithm-select'),
+            playerSelect: document.getElementById('player-select')
         };
     }
 
