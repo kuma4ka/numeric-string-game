@@ -7,3 +7,5 @@ At the beginning of the game, the generated numerical string is given. Players a
  
 The game ends when one number remains in the string. The player with the higher number of points wins. 
 
+Game link - https://kuma4ka.github.io/numeric-string-game/
+
