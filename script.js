@@ -75,23 +75,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Function to restart the game
-    function restartGame() {
-        elements.restartButton.addEventListener('click', function () {
-            document.getElementById('current-string').addEventListener('click', handleClick);
-            elements.inputSection.style.display = 'block';
-            elements.additionalContent.style.display = 'none';
-            elements.logPlayerMoves.style.display = 'none';
-            elements.logChangesInString.style.display = 'none';
-            elements.restartButton.style.display = 'none';
-            elements.logStartStringListElem.textContent = '';
-            elements.logChangesInString.innerHTML = '';
-            elements.logPlayerMoves.innerHTML = '';
-            elements.userScoreElement.textContent = 0;
-            elements.pcScoreElement.textContent = 0;
-        });
-    }
-
     // Function to get the DOM elements
     function getElements() {
         return {

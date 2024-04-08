@@ -20,6 +20,7 @@ class Game {
         return numericalString;
     }
 
+    // Play a turn in the game
     playTurn(spanIndex, spanClass) {
         let pairs = this.generatePairs();
     
