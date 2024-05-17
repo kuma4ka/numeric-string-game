@@ -1,41 +1,58 @@
 import Game from './js/game.js';
+import { showElementsOnGameStart } from './js/showElementsOnGameStart.js';
+import { addEnterPress } from './utils/addEnterPressEvent.js';
+import { getElements } from './utils/getDOMElements.js';
+import { getElementById } from './utils/getElementById.js';
+import { stringAsSpans } from './utils/stringAsSpans.js';
 
-document.addEventListener("DOMContentLoaded", function () {
-    const elements = getElements();
+function start() {
+    const {
+        startGameButton,
+        modeSelect,
+        playerSelect,
+        inputSection,
+        currentStringElement,
+        userScoreElement,
+        pcScoreElement,
+        additionalContent,
+        logChangesInString,
+        logPlayerMoves,
+        logStartStringListElem,
+        restartButton,
+        winnerParagraph,
+    } = getElements();
+
+    addEnterPress();
+
     let game;
 
-    // Event listener for the enter key press on the length input field
-    document.getElementById('length-number').addEventListener('keypress', handleEnterKeyPress);
+    function startGameButtonClick() {
+        const length = parseInt(getElementById('length-number').value);
 
-    // Event listener for the start game button click
-    elements.startGameButton.addEventListener('click', function () {
-        const length = parseInt(document.getElementById('length-number').value);
-        if (length >= 15 && length <= 25) {
-            const mode = elements.modeSelect.value;
-            const playerTurn = elements.playerSelect.value;
-            game = new Game(length, mode, playerTurn);
-            updateUI();
-            elements.additionalContent.style.display = 'block';
-            elements.logPlayerMoves.style.display = 'block';
-            elements.logChangesInString.style.display = 'block';
-            elements.logStartStringListElem.textContent = `Start string: ${game.numericalString}`;
-            elements.inputSection.style.display = 'none';
-            if (playerTurn === 'PC') {
-                setTimeout(() => {
-                    game.playTurn();
-                }, 300);
-            }
-        } else {
-            alert('Please enter a number between 15 and 25.');
+        if (length < 15 && length > 25) {
+            return alert('Please enter a number between 15 and 25.');
         }
-    });
 
-    // Event listener for the click on the current string
-    document.getElementById('current-string').addEventListener('click', handleClick);
+        const playerTurn = playerSelect.value;
+        game = new Game(length, modeSelect.value, playerTurn);
+
+        updateUI();
+        showElementsOnGameStart(
+            { additionalContent, logPlayerMoves, logChangesInString, logStartStringListElem, inputSection },
+            game
+        );
+
+        if (playerTurn === 'PC') {
+            setTimeout(() => {
+                game.playTurn();
+            }, 300);
+        }
+    }
 
     // Function to handle the click on the current string
     function handleClick(event) {
         const clickedSpan = event.target;
+
         if (clickedSpan.classList.contains('paired') || clickedSpan.classList.contains('unpaired')) {
             const clickedSpanIndex = clickedSpan.getAttribute('data-index');
             const clickedSpanClass = clickedSpan.classList[0];
@@ -47,64 +64,33 @@ document.addEventListener("DOMContentLoaded", function () {
     // Function to update the UI
     function updateUI() {
         stringAsSpans(game.generatePairs());
-        elements.userScoreElement.textContent = game.userScore;
-        elements.pcScoreElement.textContent = game.pcScore;
+        userScoreElement.textContent = game.userScore;
+        pcScoreElement.textContent = game.pcScore;
 
+        updateUIendGame();
+    }
+
+    // Function to update UI on end Game
+    function updateUIendGame() {
         if (game.numericalString.length === 1) {
-            let winner = game.endGame();
-            elements.restartButton.style.display = 'block';
-            elements.winnerParagraph.textContent = winner;
-            elements.winnerParagraph.style.color = 'green';
-            restartGame();
-            document.getElementById('current-string').removeEventListener('click', handleClick);
-        }
-    }
-    
-    // Function to convert the string into spans
-    function stringAsSpans(pairs) {
-        const pCurrentString = document.getElementById('current-string');
-        pCurrentString.innerHTML = 'Current string: ';
-    
-        pairs.forEach((pair, index) => {
-            const spanPair = document.createElement('span');
-            spanPair.textContent = pair.flat().join('');
-            if (pair.length === 1) spanPair.classList.add('unpaired');
-            else spanPair.classList.add('paired');
-            spanPair.setAttribute('data-index', index);
-            pCurrentString.appendChild(spanPair);
-        });
-    }
+            restartButton.style.display = 'block';
+            winnerParagraph.style.color = 'green';
+            winnerParagraph.textContent = game.endGame();
 
-    // Function to get the DOM elements
-    function getElements() {
-        return {
-            inputSection: document.querySelector('.input-section'),
-            currentStringElement: document.getElementById('current-string'),
-            userScoreElement: document.getElementById('user-score'),
-            pcScoreElement: document.getElementById('pc-score'),
-            startGameButton: document.querySelector('.start-game-btn'),
-            additionalContent: document.getElementById('additional-content'),
-            logChangesInString: document.getElementById('log-changes-string'),
-            logPlayerMoves: document.getElementById('log-moves'),
-            logStartStringListElem: document.getElementById('log-start-string'),
-            restartButton: document.getElementById('restart-btn'),
-            winnerParagraph: document.getElementById('winner'),
-            modeSelect: document.getElementById('algorithm-select'),
-            playerSelect: document.getElementById('player-select')
-        };
-    }
-
-    // Function to handle the enter key press
-    function handleEnterKeyPress(event) {
-        if (event.key === 'Enter') {
-            document.querySelector('.start-game-btn').click();
+            currentStringElement.removeEventListener('click', handleClick);
         }
     }
 
     // Function to restart the game
-    function restartGame() {
-        elements.restartButton.addEventListener('click', function () {
-            window.location.reload();
-        });
-    }
-});
+    restartButton.addEventListener('click', function () {
+        window.location.reload();
+    });
+
+    // Event listener for the start game button click
+    startGameButton.addEventListener('click', startGameButtonClick);
+
+    // Event listener for the click on the current string
+    currentStringElement.addEventListener('click', handleClick);
+}
+
+document.addEventListener('DOMContentLoaded', start);
