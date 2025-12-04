@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { generateInitialState, applyMove, findBestMove } from '../utils/gameLogic';
+import { generateInitialState, applyMove, findBestMove } from '../utils/gameLogic.js';
 
 export const useGameLogic = () => {
   const [numericalString, setNumericalString] = useState([]);

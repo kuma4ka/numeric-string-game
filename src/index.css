@@ -1,0 +1,167 @@
+:root {
+  --bg-color: #1a1a1a;
+  --text-color: #ffffff;
+  --primary-color: #646cff;
+  --secondary-color: #535bf2;
+  --accent-color: #ff4646;
+  --success-color: #4caf50;
+  --card-bg: #242424;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: 'Montserrat', sans-serif;
+}
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+  width: 100%;
+}
+
+.game-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+}
+
+.card {
+  background: var(--card-bg);
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 600px;
+}
+
+/* Controls */
+.controls {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+input {
+  padding: 0.6em 1.2em;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background-color: #1a1a1a;
+  color: white;
+  font-family: inherit;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.25s;
+  background-color: var(--primary-color);
+  color: white;
+}
+
+button:hover {
+  background-color: var(--secondary-color);
+}
+
+button:disabled {
+  background-color: gray;
+  cursor: not-allowed;
+}
+
+/* Game Field */
+.string-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  min-height: 80px;
+  align-items: center;
+}
+
+.number-item {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #3a3a3a;
+  border-radius: 50%;
+  font-weight: bold;
+  cursor: pointer;
+  transition:
+    transform 0.1s,
+    background-color 0.2s;
+  user-select: none;
+}
+
+.number-item:hover {
+  transform: scale(1.1);
+}
+
+.number-item.pair-start {
+  background-color: var(--primary-color);
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  margin-right: -5px; /* Visual connection */
+}
+
+.number-item.pair-end {
+  background-color: var(--primary-color);
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  margin-left: -5px;
+}
+
+.number-item.orphan {
+  background-color: var(--accent-color);
+  border: 2px solid white;
+}
+
+/* Scores */
+.scoreboard {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.active-turn {
+  color: var(--success-color);
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.winner-banner {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: var(--success-color);
+  border-radius: 8px;
+  font-weight: bold;
+  animation: popIn 0.5s ease;
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
