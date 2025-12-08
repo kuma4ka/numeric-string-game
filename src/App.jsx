@@ -15,6 +15,7 @@ function App() {
     setAlgorithm,
     startGame,
     performMove,
+    isProcessing,
   } = useGameLogic();
 
   return (
@@ -37,6 +38,7 @@ function App() {
             onMove={performMove}
             currentPlayer={currentPlayer}
             gameStatus={gameStatus}
+            isProcessing={isProcessing}
           />
         )}
 

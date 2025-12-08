@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import styles from './GameField.module.css';
 
-const GameField = ({ numericalString, onMove, currentPlayer, gameStatus }) => {
+const GameField = ({ numericalString, onMove, currentPlayer, gameStatus, isProcessing }) => {
   return (
     <div className={styles.container}>
       <AnimatePresence mode="popLayout">
@@ -15,7 +15,7 @@ const GameField = ({ numericalString, onMove, currentPlayer, gameStatus }) => {
           if (isPairEnd) itemClass += ` ${styles.pairEnd}`;
           if (isOrphan) itemClass += ` ${styles.orphan}`;
 
-          const isDisabled = currentPlayer !== 'User' || gameStatus === 'FINISHED';
+          const isDisabled = currentPlayer !== 'User' || gameStatus === 'FINISHED' || isProcessing;
 
           if (isDisabled) {
             itemClass += ` ${styles.disabled}`;
@@ -34,7 +34,7 @@ const GameField = ({ numericalString, onMove, currentPlayer, gameStatus }) => {
           return (
             <motion.div
               layout
-              key={`${index}-${num}`}
+              key={`${index}-${num}-${numericalString.length}`}
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0, opacity: 0 }}

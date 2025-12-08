@@ -12,6 +12,8 @@ export const useGameLogic = () => {
   const [winner, setWinner] = useState(null);
   const [algorithm, setAlgorithm] = useState(ALGORITHMS.ALPHA_BETA);
 
+  const [isProcessing, setIsProcessing] = useState(false);
+
   const startGame = useCallback((length) => {
     const startString = generateInitialState(length);
     setNumericalString(startString);
@@ -20,12 +22,21 @@ export const useGameLogic = () => {
     setCurrentPlayer('User');
     setGameStatus('PLAYING');
     setWinner(null);
+    setIsProcessing(false);
   }, []);
 
   const performMove = useCallback(
     (index, type) => {
+      if (isProcessing || gameStatus === 'FINISHED') return;
+
+      setIsProcessing(true);
+
       setNumericalString((prevString) => {
         const move = { index, type };
+
+        if (type === 'MERGE' && !prevString[index + 1]) {
+          return prevString;
+        }
 
         const points = calculateMoveScore(move, prevString);
 
@@ -44,13 +55,16 @@ export const useGameLogic = () => {
         return newState;
       });
 
-      setCurrentPlayer((prev) => (prev === 'User' ? 'PC' : 'User'));
+      setTimeout(() => {
+        setCurrentPlayer((prev) => (prev === 'User' ? 'PC' : 'User'));
+        setIsProcessing(false);
+      }, 400);
     },
-    [currentPlayer]
+    [currentPlayer, isProcessing, gameStatus]
   );
 
   useEffect(() => {
-    if (gameStatus === 'PLAYING' && currentPlayer === 'PC') {
+    if (gameStatus === 'PLAYING' && currentPlayer === 'PC' && !isProcessing) {
       const timer = setTimeout(() => {
         const move = findBestMove(numericalString, pcScore, userScore, algorithm);
         if (move) {
@@ -60,7 +74,16 @@ export const useGameLogic = () => {
 
       return () => clearTimeout(timer);
     }
-  }, [gameStatus, currentPlayer, numericalString, pcScore, userScore, performMove, algorithm]);
+  }, [
+    gameStatus,
+    currentPlayer,
+    numericalString,
+    pcScore,
+    userScore,
+    performMove,
+    algorithm,
+    isProcessing,
+  ]);
 
   useEffect(() => {
     if (gameStatus === 'FINISHED') {
@@ -81,5 +104,6 @@ export const useGameLogic = () => {
     setAlgorithm,
     startGame,
     performMove,
+    isProcessing,
   };
 };
