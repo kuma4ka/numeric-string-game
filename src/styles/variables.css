@@ -1,0 +1,13 @@
+:root {
+  --bg-color: #1a1a1a;
+  --text-color: #ffffff;
+  --primary-color: #646cff;
+  --secondary-color: #535bf2;
+  --accent-color: #ff4646;
+  --success-color: #4caf50;
+  --card-bg: #242424;
+
+  --font-family: 'Montserrat', sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+}

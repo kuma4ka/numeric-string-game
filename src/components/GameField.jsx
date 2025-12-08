@@ -1,29 +1,36 @@
-const GameField = ({ numericalString, onMove, currentPlayer }) => {
+import styles from './GameField.module.css';
+
+const GameField = ({ numericalString, onMove, currentPlayer, gameStatus }) => {
   return (
-    <div className="string-container">
+    <div className={styles.container}>
       {numericalString.map((num, index) => {
         const isPairStart = index % 2 === 0 && index < numericalString.length - 1;
         const isPairEnd = index % 2 !== 0;
         const isOrphan = index === numericalString.length - 1 && index % 2 === 0;
 
-        let className = 'number-item';
-        if (isPairStart) className += ' pair-start';
-        if (isPairEnd) className += ' pair-end';
-        if (isOrphan) className += ' orphan';
+        let itemClass = styles.item;
+        if (isPairStart) itemClass += ` ${styles.pairStart}`;
+        if (isPairEnd) itemClass += ` ${styles.pairEnd}`;
+        if (isOrphan) itemClass += ` ${styles.orphan}`;
+
+        const isDisabled = currentPlayer !== 'User' || gameStatus === 'FINISHED';
+
+        if (isDisabled) {
+          itemClass += ` ${styles.disabled}`;
+        }
 
         const handleClick = () => {
-          if (currentPlayer !== 'User') return; // Блокуємо, якщо ходить ПК
+          if (isDisabled) return;
 
           if (isPairStart || isPairEnd) {
-            const pairIndex = isPairStart ? index : index - 1;
-            onMove(pairIndex, 'MERGE');
+            onMove(isPairStart ? index : index - 1, 'MERGE');
           } else if (isOrphan) {
             onMove(index, 'DELETE');
           }
         };
 
         return (
-          <div key={`${index}-${num}`} className={className} onClick={handleClick}>
+          <div key={`${index}-${num}`} className={itemClass} onClick={handleClick}>
             {num}
           </div>
         );

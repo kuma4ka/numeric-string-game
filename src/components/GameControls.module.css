@@ -1,0 +1,26 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 2rem;
+}
+
+.input {
+  background-color: #2a2a2a;
+  border: 2px solid #3a3a3a;
+  border-radius: 8px;
+  padding: 0.6em 1em;
+  color: var(--text-color);
+  font-family: inherit;
+  font-size: 1rem;
+  width: 80px;
+  text-align: center;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(100, 108, 255, 0.2);
+}

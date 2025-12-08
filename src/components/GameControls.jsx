@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import styles from './GameControls.module.css';
 import { MIN_LENGTH, MAX_LENGTH } from '../utils/gameLogic';
 
 const GameControls = ({ onStart, isPlaying }) => {
@@ -9,8 +10,9 @@ const GameControls = ({ onStart, isPlaying }) => {
   };
 
   return (
-    <div className="controls">
+    <div className={styles.container}>
       <input
+        className={styles.input}
         type="number"
         min={MIN_LENGTH}
         max={MAX_LENGTH}

@@ -29,6 +29,7 @@ function App() {
             numericalString={numericalString}
             onMove={performMove}
             currentPlayer={currentPlayer}
+            gameStatus={gameStatus}
           />
         )}
 
