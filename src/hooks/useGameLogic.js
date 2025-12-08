@@ -3,7 +3,7 @@ import {
   generateInitialState,
   simulateMove,
   findBestMove,
-  SCORES,
+  calculateMoveScore,
   ALGORITHMS,
 } from '../utils/gameLogic';
 
@@ -14,7 +14,6 @@ export const useGameLogic = () => {
   const [currentPlayer, setCurrentPlayer] = useState('User');
   const [gameStatus, setGameStatus] = useState('IDLE');
   const [winner, setWinner] = useState(null);
-
   const [algorithm, setAlgorithm] = useState(ALGORITHMS.ALPHA_BETA);
 
   const startGame = useCallback((length) => {
@@ -30,20 +29,24 @@ export const useGameLogic = () => {
   const performMove = useCallback(
     (index, type) => {
       setNumericalString((prevString) => {
-        const newState = simulateMove(prevString, { index, type });
+        const move = { index, type };
+
+        const points = calculateMoveScore(move, prevString);
+
+        if (currentPlayer === 'User') {
+          setUserScore((s) => s + points);
+        } else {
+          setPcScore((s) => s + points);
+        }
+
+        const newState = simulateMove(prevString, move);
+
         if (newState.length <= 1) {
           setGameStatus('FINISHED');
         }
+
         return newState;
       });
-
-      if (currentPlayer === 'User') {
-        if (type === 'MERGE') setUserScore((s) => s + SCORES.MERGE_REWARD);
-        else if (type === 'DELETE') setPcScore((s) => s - SCORES.DELETE_PENALTY);
-      } else {
-        if (type === 'MERGE') setPcScore((s) => s + SCORES.MERGE_REWARD);
-        else if (type === 'DELETE') setUserScore((s) => s - SCORES.DELETE_PENALTY);
-      }
 
       setCurrentPlayer((prev) => (prev === 'User' ? 'PC' : 'User'));
     },

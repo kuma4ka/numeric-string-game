@@ -8,8 +8,9 @@ export const ALGORITHMS = {
 };
 
 export const SCORES = {
-  MERGE_REWARD: 1,
-  DELETE_PENALTY: 1,
+  MERGE_BASE: 1,
+  MERGE_BONUS: 3,
+  DELETE_COST: -1,
 };
 
 export const generateInitialState = (length) => {
@@ -20,6 +21,22 @@ export const generateInitialState = (length) => {
 export const calculateMergeResult = (a, b) => {
   const sum = a + b;
   return sum > MAX_NUMBER ? ((sum - 1) % MAX_NUMBER) + 1 : sum;
+};
+
+export const calculateMoveScore = (move, state) => {
+  if (move.type === 'DELETE') {
+    return SCORES.DELETE_COST;
+  }
+
+  if (move.type === 'MERGE') {
+    const a = state[move.index];
+    const b = state[move.index + 1];
+    if ((a + b) % 7 === 0 || a + b === 7) {
+      return SCORES.MERGE_BONUS;
+    }
+    return SCORES.MERGE_BASE;
+  }
+  return 0;
 };
 
 export const simulateMove = (currentState, move) => {
@@ -64,11 +81,7 @@ const minimax = (state, depth, isMaximizing, alpha, beta, aiScore, userScore, us
 
     for (const move of moves) {
       const nextState = simulateMove(state, move);
-      let newAiScore = aiScore;
-      let newUserScore = userScore;
-
-      if (move.type === 'MERGE') newAiScore += SCORES.MERGE_REWARD;
-      else if (move.type === 'DELETE') newUserScore -= SCORES.DELETE_PENALTY;
+      const points = calculateMoveScore(move, state);
 
       const evalResult = minimax(
         nextState,
@@ -76,8 +89,8 @@ const minimax = (state, depth, isMaximizing, alpha, beta, aiScore, userScore, us
         false,
         alpha,
         beta,
-        newAiScore,
-        newUserScore,
+        aiScore + points,
+        userScore,
         usePruning
       );
 
@@ -97,11 +110,7 @@ const minimax = (state, depth, isMaximizing, alpha, beta, aiScore, userScore, us
 
     for (const move of moves) {
       const nextState = simulateMove(state, move);
-      let newAiScore = aiScore;
-      let newUserScore = userScore;
-
-      if (move.type === 'MERGE') newUserScore += SCORES.MERGE_REWARD;
-      else if (move.type === 'DELETE') newAiScore -= SCORES.DELETE_PENALTY;
+      const points = calculateMoveScore(move, state);
 
       const evalResult = minimax(
         nextState,
@@ -109,8 +118,8 @@ const minimax = (state, depth, isMaximizing, alpha, beta, aiScore, userScore, us
         true,
         alpha,
         beta,
-        newAiScore,
-        newUserScore,
+        aiScore,
+        userScore + points,
         usePruning
       );
 
@@ -128,6 +137,8 @@ const minimax = (state, depth, isMaximizing, alpha, beta, aiScore, userScore, us
 };
 
 export const findBestMove = (currentState, currentAiScore, currentUserScore, algorithmType) => {
+  if (currentState.length <= 1) return null;
+
   const usePruning = algorithmType === ALGORITHMS.ALPHA_BETA;
 
   const result = minimax(
