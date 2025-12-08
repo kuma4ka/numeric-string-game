@@ -1,6 +1,6 @@
 import styles from './GameField.module.css';
 
-const GameField = ({ numericalString, onMove, currentPlayer }) => {
+const GameField = ({ numericalString, onMove, currentPlayer, gameStatus }) => {
   return (
     <div className={styles.container}>
       {numericalString.map((num, index) => {
@@ -13,10 +13,15 @@ const GameField = ({ numericalString, onMove, currentPlayer }) => {
         if (isPairEnd) itemClass += ` ${styles.pairEnd}`;
         if (isOrphan) itemClass += ` ${styles.orphan}`;
 
-        if (currentPlayer !== 'User') itemClass += ` ${styles.disabled}`;
+        const isDisabled = currentPlayer !== 'User' || gameStatus === 'FINISHED';
+
+        if (isDisabled) {
+          itemClass += ` ${styles.disabled}`;
+        }
 
         const handleClick = () => {
-          if (currentPlayer !== 'User') return;
+          if (isDisabled) return;
+
           if (isPairStart || isPairEnd) {
             onMove(isPairStart ? index : index - 1, 'MERGE');
           } else if (isOrphan) {
