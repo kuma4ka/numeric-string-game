@@ -1,0 +1,52 @@
+.container {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  margin-bottom: 2rem;
+  padding: 1rem 2rem;
+  background-color: rgba(255, 255, 255, 0.03);
+  border-radius: 16px;
+  backdrop-filter: blur(5px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.player {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 80px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0.4;
+  filter: grayscale(0.8);
+}
+
+.active {
+  opacity: 1;
+  transform: scale(1.1);
+  filter: grayscale(0);
+}
+
+.label {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.score {
+  font-size: 2.5rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.player:first-child .score {
+  color: var(--primary-color);
+  text-shadow: 0 0 20px rgba(100, 108, 255, 0.3);
+}
+
+.player:last-child .score {
+  color: var(--accent-color);
+  text-shadow: 0 0 20px rgba(255, 70, 70, 0.3);
+}
