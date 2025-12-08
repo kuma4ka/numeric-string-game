@@ -1,11 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
-import {
-  generateInitialState,
-  simulateMove,
-  findBestMove,
-  calculateMoveScore,
-  ALGORITHMS,
-} from '../utils/gameLogic';
+import { ALGORITHMS } from '../utils/constants';
+import { generateInitialState, simulateMove, calculateMoveScore } from '../utils/helpers';
+import { findBestMove } from '../utils/ai';
 
 export const useGameLogic = () => {
   const [numericalString, setNumericalString] = useState([]);

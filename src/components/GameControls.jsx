@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styles from './GameControls.module.css';
-import { MIN_LENGTH, MAX_LENGTH, ALGORITHMS } from '../utils/gameLogic';
+import { MIN_LENGTH, MAX_LENGTH, ALGORITHMS } from '../utils/constants';
 
 const GameControls = ({ onStart, gameStatus, algorithm, onAlgorithmChange }) => {
   const [length, setLength] = useState(20);
