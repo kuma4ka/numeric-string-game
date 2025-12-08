@@ -2,6 +2,11 @@ export const MIN_LENGTH = 15;
 export const MAX_LENGTH = 25;
 export const MAX_NUMBER = 6;
 
+export const ALGORITHMS = {
+  MINIMAX: 'MINIMAX',
+  ALPHA_BETA: 'ALPHA_BETA',
+};
+
 export const SCORES = {
   MERGE_REWARD: 1,
   DELETE_PENALTY: 1,
@@ -40,13 +45,13 @@ export const getAvailableMoves = (currentState) => {
   return moves;
 };
 
-const MAX_DEPTH = 6;
+const MAX_DEPTH = 5;
 
 const evaluateState = (aiScore, userScore) => {
   return aiScore - userScore;
 };
 
-const minimax = (state, depth, isMaximizing, alpha, beta, aiScore, userScore) => {
+const minimax = (state, depth, isMaximizing, alpha, beta, aiScore, userScore, usePruning) => {
   if (depth === 0 || state.length <= 1) {
     return { score: evaluateState(aiScore, userScore) };
   }
@@ -72,15 +77,19 @@ const minimax = (state, depth, isMaximizing, alpha, beta, aiScore, userScore) =>
         alpha,
         beta,
         newAiScore,
-        newUserScore
+        newUserScore,
+        usePruning
       );
 
       if (evalResult.score > maxEval) {
         maxEval = evalResult.score;
         bestMove = move;
       }
-      alpha = Math.max(alpha, evalResult.score);
-      if (beta <= alpha) break;
+
+      if (usePruning) {
+        alpha = Math.max(alpha, evalResult.score);
+        if (beta <= alpha) break;
+      }
     }
     return { score: maxEval, move: bestMove };
   } else {
@@ -94,19 +103,33 @@ const minimax = (state, depth, isMaximizing, alpha, beta, aiScore, userScore) =>
       if (move.type === 'MERGE') newUserScore += SCORES.MERGE_REWARD;
       else if (move.type === 'DELETE') newAiScore -= SCORES.DELETE_PENALTY;
 
-      const evalResult = minimax(nextState, depth - 1, true, alpha, beta, newAiScore, newUserScore);
+      const evalResult = minimax(
+        nextState,
+        depth - 1,
+        true,
+        alpha,
+        beta,
+        newAiScore,
+        newUserScore,
+        usePruning
+      );
 
       if (evalResult.score < minEval) {
         minEval = evalResult.score;
       }
-      beta = Math.min(beta, evalResult.score);
-      if (beta <= alpha) break;
+
+      if (usePruning) {
+        beta = Math.min(beta, evalResult.score);
+        if (beta <= alpha) break;
+      }
     }
     return { score: minEval };
   }
 };
 
-export const findBestMove = (currentState, currentAiScore, currentUserScore) => {
+export const findBestMove = (currentState, currentAiScore, currentUserScore, algorithmType) => {
+  const usePruning = algorithmType === ALGORITHMS.ALPHA_BETA;
+
   const result = minimax(
     currentState,
     MAX_DEPTH,
@@ -114,7 +137,9 @@ export const findBestMove = (currentState, currentAiScore, currentUserScore) => 
     -Infinity,
     Infinity,
     currentAiScore,
-    currentUserScore
+    currentUserScore,
+    usePruning
   );
+
   return result.move || getAvailableMoves(currentState)[0];
 };

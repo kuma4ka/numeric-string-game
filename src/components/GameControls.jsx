@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import styles from './GameControls.module.css';
-import { MIN_LENGTH, MAX_LENGTH } from '../utils/gameLogic';
+import { MIN_LENGTH, MAX_LENGTH, ALGORITHMS } from '../utils/gameLogic';
 
-const GameControls = ({ onStart, gameStatus }) => {
+const GameControls = ({ onStart, gameStatus, algorithm, onAlgorithmChange }) => {
   const [length, setLength] = useState(20);
 
   const handleChange = (e) => {
@@ -28,6 +28,18 @@ const GameControls = ({ onStart, gameStatus }) => {
 
   return (
     <div className={styles.container}>
+      <div className={styles.selectWrapper}>
+        <select
+          className={styles.select}
+          value={algorithm}
+          onChange={(e) => onAlgorithmChange(e.target.value)}
+          disabled={isLocked}
+        >
+          <option value={ALGORITHMS.MINIMAX}>Minimax (Slow)</option>
+          <option value={ALGORITHMS.ALPHA_BETA}>Alpha-Beta (Fast)</option>
+        </select>
+      </div>
+
       <input
         className={styles.input}
         type="number"

@@ -1,5 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
-import { generateInitialState, simulateMove, findBestMove, SCORES } from '../utils/gameLogic';
+import {
+  generateInitialState,
+  simulateMove,
+  findBestMove,
+  SCORES,
+  ALGORITHMS,
+} from '../utils/gameLogic';
 
 export const useGameLogic = () => {
   const [numericalString, setNumericalString] = useState([]);
@@ -8,6 +14,8 @@ export const useGameLogic = () => {
   const [currentPlayer, setCurrentPlayer] = useState('User');
   const [gameStatus, setGameStatus] = useState('IDLE');
   const [winner, setWinner] = useState(null);
+
+  const [algorithm, setAlgorithm] = useState(ALGORITHMS.ALPHA_BETA);
 
   const startGame = useCallback((length) => {
     const startString = generateInitialState(length);
@@ -23,7 +31,6 @@ export const useGameLogic = () => {
     (index, type) => {
       setNumericalString((prevString) => {
         const newState = simulateMove(prevString, { index, type });
-
         if (newState.length <= 1) {
           setGameStatus('FINISHED');
         }
@@ -46,15 +53,15 @@ export const useGameLogic = () => {
   useEffect(() => {
     if (gameStatus === 'PLAYING' && currentPlayer === 'PC') {
       const timer = setTimeout(() => {
-        const move = findBestMove(numericalString, pcScore, userScore);
+        const move = findBestMove(numericalString, pcScore, userScore, algorithm);
         if (move) {
           performMove(move.index, move.type);
         }
-      }, 600);
+      }, 100);
 
       return () => clearTimeout(timer);
     }
-  }, [gameStatus, currentPlayer, numericalString, pcScore, userScore, performMove]);
+  }, [gameStatus, currentPlayer, numericalString, pcScore, userScore, performMove, algorithm]);
 
   useEffect(() => {
     if (gameStatus === 'FINISHED') {
@@ -71,6 +78,8 @@ export const useGameLogic = () => {
     currentPlayer,
     gameStatus,
     winner,
+    algorithm,
+    setAlgorithm,
     startGame,
     performMove,
   };
