@@ -11,6 +11,8 @@ function App() {
     currentPlayer,
     gameStatus,
     winner,
+    algorithm,
+    setAlgorithm,
     startGame,
     performMove,
   } = useGameLogic();
@@ -24,8 +26,9 @@ function App() {
 
         <GameControls
           onStart={startGame}
-          isPlaying={gameStatus === 'PLAYING'}
           gameStatus={gameStatus}
+          algorithm={algorithm}
+          onAlgorithmChange={setAlgorithm}
         />
 
         {gameStatus !== 'IDLE' && (
