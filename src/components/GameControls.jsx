@@ -2,11 +2,28 @@ import { useState } from 'react';
 import styles from './GameControls.module.css';
 import { MIN_LENGTH, MAX_LENGTH } from '../utils/gameLogic';
 
-const GameControls = ({ onStart, isPlaying }) => {
+const GameControls = ({ onStart, gameStatus }) => {
   const [length, setLength] = useState(20);
 
+  const handleChange = (e) => {
+    setLength(e.target.value);
+  };
+
   const handleStart = () => {
-    onStart(Number(length));
+    let finalValue = Number(length);
+    if (finalValue < MIN_LENGTH) finalValue = MIN_LENGTH;
+    if (finalValue > MAX_LENGTH) finalValue = MAX_LENGTH;
+
+    setLength(finalValue);
+    onStart(finalValue);
+  };
+
+  const isLocked = gameStatus === 'PLAYING';
+
+  const getButtonLabel = () => {
+    if (gameStatus === 'PLAYING') return 'Restart';
+    if (gameStatus === 'FINISHED') return 'Play Again';
+    return 'Start';
   };
 
   return (
@@ -17,10 +34,13 @@ const GameControls = ({ onStart, isPlaying }) => {
         min={MIN_LENGTH}
         max={MAX_LENGTH}
         value={length}
-        onChange={(e) => setLength(e.target.value)}
-        disabled={isPlaying}
+        onChange={handleChange}
+        disabled={isLocked}
       />
-      <button onClick={handleStart}>{isPlaying ? 'Restart Game' : 'Start Game'}</button>
+
+      <button className={styles.startBtn} onClick={handleStart}>
+        {getButtonLabel()}
+      </button>
     </div>
   );
 };

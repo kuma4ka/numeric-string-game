@@ -22,7 +22,11 @@ function App() {
       <div className="card">
         <ScoreBoard userScore={userScore} pcScore={pcScore} currentPlayer={currentPlayer} />
 
-        <GameControls onStart={startGame} isPlaying={gameStatus === 'PLAYING'} />
+        <GameControls
+          onStart={startGame}
+          isPlaying={gameStatus === 'PLAYING'}
+          gameStatus={gameStatus}
+        />
 
         {gameStatus !== 'IDLE' && (
           <GameField
