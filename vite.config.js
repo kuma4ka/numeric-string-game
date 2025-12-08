@@ -10,7 +10,7 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       scope: '/numeric-string-game/',
-      start_url: '/numeric-string-game/',
+      base: '/numeric-string-game/',
 
       manifest: {
         name: 'Numeric String Game',
@@ -19,16 +19,20 @@ export default defineConfig({
         theme_color: '#1a1a1a',
         background_color: '#1a1a1a',
         display: 'standalone',
+        start_url: '/numeric-string-game/',
+
         icons: [
           {
             src: 'pwa-192x192.png',
             sizes: '192x192',
             type: 'image/png',
+            purpose: 'any maskable',
           },
           {
             src: 'pwa-512x512.png',
             sizes: '512x512',
             type: 'image/png',
+            purpose: 'any maskable',
           },
         ],
       },
