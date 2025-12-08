@@ -4,22 +4,21 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
   base: '/numeric-string-game/',
+
   plugins: [
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
-      devOptions: {
-        enabled: true,
-      },
+      scope: '/numeric-string-game/',
+      start_url: '/numeric-string-game/',
+
       manifest: {
         name: 'Numeric String Game',
         short_name: 'NumGame',
-        description: 'Strategic mathematical puzzle game',
+        description: 'A simple numeric memory game',
         theme_color: '#1a1a1a',
         background_color: '#1a1a1a',
         display: 'standalone',
-        orientation: 'portrait',
         icons: [
           {
             src: 'pwa-192x192.png',
@@ -35,10 +34,4 @@ export default defineConfig({
       },
     }),
   ],
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    setupFiles: './src/setupTests.js',
-    css: true,
-  },
 });
